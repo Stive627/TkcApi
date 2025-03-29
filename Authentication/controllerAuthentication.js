@@ -25,18 +25,19 @@ const Register = async(req, res) => {
     const newAdmin = new UserModel({username:username, email:email, password:cryptPass})
     await newAdmin.save()
     .catch((error)=>res.status(400).send(error))
-    await tmail('renolux3@@gmail.com', 'fltnedzlveaexylz', email, 'Nouveau admininstrateur Renolux', "<h1 style='color:'blue'>Bienvenue dans l\'espace administrateur de renolux cameroun.</h1>")
+    await tmail('tsasoft7@gmail.com', 'oyxmklwkwivrovia', email, `welcome in TKC, ${username}`, "<h1 style='color:'blue'>TKC is a notes application that allows us to save important notes and tips that we discover during our daily work.</h1>")
     .then((value) => {console.log(value.response); res.status(200).send(value.response)})
     .catch((error) => console.log('An error occured while sending message', error))
 }
 
 const login = async (req, res) => {
     const {usernameoremail, password} = req.body
-    if(!usernameoremail || !password) return res.send(`successfully logged, ${token}`)
+    if(!usernameoremail || !password) return res.status(400).send('some fields are missing')
     const user = await UserModel.findOne({$or:[{username:usernameoremail}, {email:usernameoremail}]}).catch((error)=>res.status(400).send(error))
     if(!user) return res.status(400).send('Invalid credential')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
+        res.cookie('logininfo', JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true})
         return res.send(`successfully logged`)   
     }
     res.send('invalid credentials.')
@@ -70,12 +71,12 @@ const passwordChange = async (req, res) => {
     .catch((reason)=>res.send(`An error occured. \nThe reason is ${reason}`)) 
 }
 
-const connect = (req, res)=>{
-    const cook = req.cookies.userInfo
+const connect = (req, res) => {
+    const cook = req.cookies.logininfo
     if(!cook){
-        return res.status(400).send({message:'An error occured'})
+        return res.status(400).send('You have to login again or create your account first.')
     }
-    return res.status(200).send(JSON.parse(cook))
+    return res.redirect('https://tkc.tsasoft.com/register')
 }
 
 module.exports = {Register, login, emailVerification, passwordChange, passwordRecovery, passwordRecovery, connect}
