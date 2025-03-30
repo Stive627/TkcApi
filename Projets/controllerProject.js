@@ -24,10 +24,11 @@ const getUserProject = async(req, res) => {
 const addProject = async(req, res) => {
     const {title, category, description} = req.body
     const images = req.files
+    const imagesUrl = images.map(elt => elt.path)
     if(!title || !category || !images || !description){
         return res.status(400).send('The fields are missing')
     }
-    const newProject = new ProjetModel({...req.body, images:images.path})
+    const newProject = new ProjetModel({...req.body, images:imagesUrl})
     await newProject.save()
     .then(()=> res.status(200).send('A new project added'))
     .catch((err) => res.status(400).send(err))
@@ -37,10 +38,11 @@ const updateProject = async(req, res) => {
     const {title, category, description} = req.body
     const projectId = req.params.id
     const images = req.files
+    const imagesUrl = images.map(elt => elt.path)
     if(!title || !category || !images || !description){
         return res.status(400).send('The fields are missing')
     }
-        await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:images})
+        await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:imagesUrl})
         .then(()=> res.status(200).send('the project is updated'))
         .catch((err) => res.status(400).send(err))
 }

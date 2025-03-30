@@ -23,9 +23,9 @@ const getUserSnippets = async(req, res) => {
 }
 
 const addSnippet = async(req, res) => {
-    const {title, category, description} = req.body
+    const {title, department, description} = req.body
     const image = req.file
-    if(!title || !category || !image || !description){
+    if(!title || !department || !description){
         return res.status(400).send('The fields are missing')
     }
     const newSnippet = new SnippetModel({...req.body, image:image.path})
@@ -35,13 +35,13 @@ const addSnippet = async(req, res) => {
 }
 
 const updateSnippet = async(req, res) => {
-    const {title, category, description} = req.body
+    const {title, department, description} = req.body
     const image = req.file
     const snippetId = req.params.id
-    if(!title || !category || !image || !description){
+    if(!title || !department || !description){
         return res.status(400).send('The fields are missing')
     }
-    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image})
+    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image.path})
     .then(()=> res.status(200).send('the snippet is updated'))
     .catch((err) => res.status(400).send(err))
 }
