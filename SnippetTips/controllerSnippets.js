@@ -28,7 +28,7 @@ const addSnippet = async(req, res) => {
     if(!title || !department || !description){
         return res.status(400).send('The fields are missing')
     }
-    const newSnippet = new SnippetModel({...req.body, image:image.path})
+    const newSnippet = image? new SnippetModel({...req.body, image:image.path}) : new SnippetModel({...req.body})
     await newSnippet.save()
     .then(()=> res.status(200).send('A new snippet added'))
     .catch((err) => res.status(400).send(err))
