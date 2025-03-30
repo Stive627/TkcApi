@@ -5,6 +5,8 @@ const UserSchema = new Schema({
     username:{type:String, required:true, unique:true},
     email:{type:String, required:true},
     password: {type:String, required:true},
+    snippets:[{type:Schema.Types.ObjectId, ref:'SnippetsTips'}],
+    projects:[{type:Schema.Types.ObjectId, ref:'Projects'}]
 }, 
 {timestamps:true})
 const UserModel = mongoose.model('Users', UserSchema)
