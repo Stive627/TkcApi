@@ -43,11 +43,11 @@ const login = async (req, res) => {
     res.send('invalid credentials.')
 }
 
-const emailVerification = async (req, res) =>{
+const emailVerification = async (req, res) => {
     const {email} = req.body
     const code = Math.floor(Math.random()*(199999 - 100000) + 100000)
     const codeString = String(code).slice(0, 3) + ' ' + String(code).slice(3)
-    await tmail('tsasoft7@gmail.com', 'oyxmklwkwivrovia', email, 'Here is the code to change your email address', `<h2>Your verification code </h2><h1>${codeString}</h1>`)
+    await tmail('tsasoft7@gmail.com', 'oyxmklwkwivrovia', email, 'Here is the code to verify your email address', `<h2>Your verification code </h2><h1>${codeString}</h1>`)
     .then((value)=>res.send({message:value.response, code:code}))
     .catch((error)=>res.status(400).send(error))
 }
