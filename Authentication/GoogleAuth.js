@@ -27,7 +27,7 @@ routerGoogle.get('/auth/google/callback', async(req, res)=>{
     })
     console.log(profile)
     res.cookie('userInfo', JSON.stringify(profile), {maxAge:1000*60*60*24, httpOnly:true})
-    res.redirect(frontend_Redirect(profile.email))
+    res.redirect(`https://tkcapi.tsasoft.com/finalRegister?email=${email}`)
 } catch(error){
 console.error('Error:', error.response.data)
 }
