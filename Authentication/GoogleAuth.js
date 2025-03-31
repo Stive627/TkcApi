@@ -4,7 +4,7 @@ const routerGoogle = express.Router()
 require('dotenv').config()
 
 const REDIRECT_URI = 'https://tkcapi.tsasoft.com/auth/google/callback'
-const frontend_Redirect = (email) => `https://tkcapi.tsasoft.com/finalRegister?email=${email}`
+const frontend_Redirect = (email) => `https://tkc.tsasoft.com/finalRegister?email=${email}`
 
 routerGoogle.get('/auth/google', (req, res)=>{
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile email`;
