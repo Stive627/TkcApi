@@ -24,18 +24,6 @@ app.use(express.static("public"))
 app.get('/', (req, res) => res.status(200).send('The Api is working well!'))
 app.use('/snippet', routerSnippets)
 app.use('/project', routerProject)
-app.get('/setcookie', (req, res) => {
-    res.cookie('userinfo', JSON.stringify({name:'stive', uid:'24MCI10053'}), {maxAge:1000*60*60*24*30, httpOnly:true, sameSite:'none', secure:true})
-    res.status(200).send('Cookie sent')
-})
-app.get('/deletecookie', (req, res) =>{
-    res.clearCookie('logininfo')
-    res.end('cookie cleared')
-
-})
-app.get('/redirect', (req, res) => res.status(200).redirect(`https://tkc.tsasoft.com/?email=fossistive627@gmail.com`))
-app.get('/getcookie', (req, res) => res.status(200).send(req.cookies.logininfo))
-app.get('/beforeRedirect', (req, res) => res.redirect(`/?email=fossistive627@gmail.com&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`))
 app.use('/user', routerAuthentication)
 app.use('/', routerGoogle)
 mongoose.connect(uri, {dbName:'TKC'}).then(()=>console.log('Connected to the database')).catch(err => console.error(err))
