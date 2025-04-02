@@ -37,13 +37,13 @@ const login = async (req, res) => {
     const {usernameoremail, password} = req.body
     if(!usernameoremail || !password) return res.status(400).send('some fields are missing')
     const user = await UserModel.findOne({$or:[{username:usernameoremail}, {email:usernameoremail}]}).catch((error)=>res.status(400).send(error))
-    if(!user) return res.status(400).send('Invalid credential')
+    if(!user) return res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
         res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None'})
         return res.redirect(`https://tkc.tsasoft.com/${usernameoremail}`)  
     }
-    res.send('invalid credentials.')
+    res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
 }
 
 const emailVerification = async (req, res) => {
