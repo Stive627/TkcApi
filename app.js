@@ -11,7 +11,7 @@ require('dotenv').config()
 const app = express()
 const port = process.env.port || 8080
 const uri = process.env.uri
-app.use(cors({credentials:'true'}))
+app.use(cors({origin:'https://tkc.tsasoft.com',credentials:'true'}))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -24,7 +24,7 @@ app.get('/setcookie', (req, res) => {
     res.status(200).send('Cookie sent')
 })
 app.get('/deletecookie', (req, res) =>{
-    res.clearCookie('userinfo')
+    res.clearCookie('logininfo')
     res.end('cookie cleared')
 
 })
