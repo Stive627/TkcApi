@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const tmail = require('./tmail')
 const UserModel = require('./user')
+const { json } = require('body-parser')
 require('dotenv').config()
 
 const Register = async(req, res) => {
@@ -74,9 +75,9 @@ const passwordChange = async (req, res) => {
 const connect = (req, res) => {
     const cook = req.cookies.logininfo
     if(!cook){
-        return res.status(400).send('You have to login again or create your account first.')
+        return res.status(400).send({authenticated:false})
     }
-    return res.redirect('https://tkc.tsasoft.com/register')
+    return res.status(200).send({authenticated:true, data: JSON.parse(cook)})
 }
 
 module.exports = {Register, login, emailVerification, passwordChange, passwordRecovery, passwordRecovery, connect}
