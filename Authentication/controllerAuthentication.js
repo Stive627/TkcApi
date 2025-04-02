@@ -74,10 +74,15 @@ const passwordChange = async (req, res) => {
 
 const connect = (req, res) => {
     const cook = req.cookies.logininfo
-    if(!cook){
-        return res.status(400).send({authenticated:false})
+    try {
+        if(!cook){
+            return res.status(200).send({authenticated:false})
+        }
+        return res.status(200).send({authenticated:true, data: JSON.parse(cook)})
+    
+    } catch (error) {
+       res.status(400).send(error) 
     }
-    return res.status(200).send({authenticated:true, data: JSON.parse(cook)})
-}
+   }
 
 module.exports = {Register, login, emailVerification, passwordChange, passwordRecovery, passwordRecovery, connect}
