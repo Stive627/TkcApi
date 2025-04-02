@@ -33,6 +33,7 @@ app.get('/deletecookie', (req, res) =>{
     res.end('cookie cleared')
 
 })
+app.get('/redirect', (req, res) => res.status(200).redirect(`https://tkc.tsasoft.com/?email=fossistive627@gmail.com`))
 app.get('/getcookie', (req, res) => res.status(200).send(req.cookies.logininfo))
 app.get('/beforeRedirect', (req, res) => res.redirect(`/?email=fossistive627@gmail.com&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`))
 app.use('/user', routerAuthentication)
