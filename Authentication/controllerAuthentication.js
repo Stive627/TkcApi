@@ -28,7 +28,7 @@ const Register = async(req, res) => {
     await tmail('tsasoft7@gmail.com', 'oyxmklwkwivrovia', email, `welcome in TKC, ${username}`, "<h1 style='color:'blue'>TKC is a notes application that allows us to save important notes and tips that we discover during our daily work.</h1>")
     .then((value) => {
         console.log(value.response);
-        res.cookie('logininfo', JSON.stringify({nameoremail:email, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None'})
+        res.cookie('logininfo', JSON.stringify({nameoremail:email, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
         return res.status(200).send({email:email, message:'registration succeed'})})
     .catch((error) => console.log('An error occured while sending message', error))
 }
@@ -40,7 +40,7 @@ const login = async (req, res) => {
     if(!user) return res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
-        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None'})
+        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
         return res.status(200).send({email:usernameoremail, message:'authentication granted'}) 
     }
     res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
