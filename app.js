@@ -11,7 +11,7 @@ require('dotenv').config()
 const app = express()
 const port = process.env.port || 8080
 const uri = process.env.uri
-app.use(cors({origin:'*',credentials:'true'}))
+app.use(cors({credentials:'true'}))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
