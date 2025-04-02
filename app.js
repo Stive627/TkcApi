@@ -25,7 +25,7 @@ app.get('/', (req, res) => res.status(200).send('The Api is working well!'))
 app.use('/snippet', routerSnippets)
 app.use('/project', routerProject)
 app.get('/setcookie', (req, res) => {
-    res.cookie('userinfo', JSON.stringify({name:'stive', uid:'24MCI10053'}), {maxAge:1000*60*60*24*30, httpOnly:true})
+    res.cookie('userinfo', JSON.stringify({name:'stive', uid:'24MCI10053'}), {maxAge:1000*60*60*24*30, httpOnly:true, sameSite:'none', secure:true})
     res.status(200).send('Cookie sent')
 })
 app.get('/deletecookie', (req, res) =>{

@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs')
 const tmail = require('./tmail')
 const UserModel = require('./user')
-const { json } = require('body-parser')
 require('dotenv').config()
 
 const Register = async(req, res) => {
@@ -29,7 +28,7 @@ const Register = async(req, res) => {
     await tmail('tsasoft7@gmail.com', 'oyxmklwkwivrovia', email, `welcome in TKC, ${username}`, "<h1 style='color:'blue'>TKC is a notes application that allows us to save important notes and tips that we discover during our daily work.</h1>")
     .then((value) => {
         console.log(value.response);
-        res.cookie('logininfo', JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true})
+        res.cookie('logininfo', JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
         res.status(200).send(value.response)})
     .catch((error) => console.log('An error occured while sending message', error))
 }
@@ -41,7 +40,7 @@ const login = async (req, res) => {
     if(!user) return res.status(400).send('Invalid credential')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
-        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:None, Secure})
+        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None'})
         return res.send(`successfully logged`)   
     }
     res.send('invalid credentials.')
