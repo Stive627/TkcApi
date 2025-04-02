@@ -23,6 +23,11 @@ app.get('/setcookie', (req, res) => {
     res.cookie('userinfo', JSON.stringify({name:'stive', uid:'24MCI10053'}), {maxAge:1000*60*60*24*30, httpOnly:true})
     res.status(200).send('Cookie sent')
 })
+app.get('/deletecookie', (req, res) =>{
+    res.clearCookie('userinfo')
+    res.end('cookie cleared')
+
+})
 app.get('/getcookie', (req, res) => res.status(200).send(req.cookies.userinfo))
 app.get('/beforeRedirect', (req, res) => res.redirect(`/?email=fossistive627@gmail.com&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`))
 app.use('/user', routerAuthentication)

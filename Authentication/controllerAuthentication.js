@@ -85,4 +85,13 @@ const connect = (req, res) => {
     }
    }
 
-module.exports = {Register, login, emailVerification, passwordChange, passwordRecovery, passwordRecovery, connect}
+const logout = (req, res) => {
+    try {
+        res.clearCookie('logininfo')
+        res.end('cookie deleted')
+    } catch (error) {
+        res.status(400).send(error)
+    }
+}
+
+module.exports = {Register, login, emailVerification, passwordChange, passwordRecovery, passwordRecovery, connect, logout}

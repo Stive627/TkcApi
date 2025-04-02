@@ -1,5 +1,5 @@
 const express = require('express')
-const { Register, emailVerification, login, connect, passwordRecovery, passwordChange } = require('./controllerAuthentication')
+const { Register, emailVerification, login, connect, passwordRecovery, passwordChange, logout } = require('./controllerAuthentication')
 const routerAuthentication = express.Router()
 
 routerAuthentication.post('/register', Register)
@@ -8,5 +8,6 @@ routerAuthentication.post('/login', login)
 routerAuthentication.get('/connect', connect)
 routerAuthentication.post('/passwordRecovery',passwordRecovery)
 routerAuthentication.post('/passwordChange', passwordChange)
+routerAuthentication.get('/logout', logout)
 
 module.exports = routerAuthentication
