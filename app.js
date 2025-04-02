@@ -11,7 +11,12 @@ require('dotenv').config()
 const app = express()
 const port = process.env.port || 8080
 const uri = process.env.uri
-app.use(cors({origin:['https://tkc.tsasoft.com', 'http://localhost:3000'], methods:['GET', 'UPDATE', 'DELETE', 'POST'], allowedHeaders: ['Content-Type', 'Authorization'], credentials:'true'}))
+app.use(cors({
+    origin: ['https://tkc.tsasoft.com', 'http://localhost:3000'], 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    allowedHeaders: ['Content-Type', 'Authorization'], 
+    credentials: true 
+  }));
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))

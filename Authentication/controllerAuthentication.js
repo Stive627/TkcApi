@@ -41,7 +41,7 @@ const login = async (req, res) => {
     if(!user) return res.status(400).send('Invalid credential')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
-        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:NONE, Secure})
+        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:None, Secure})
         return res.send(`successfully logged`)   
     }
     res.send('invalid credentials.')
