@@ -31,7 +31,7 @@ const Register = async(req, res) => {
         console.log(value.response);
         res.cookie('logininfo', JSON.stringify({nameoremail:email, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
         return res.status(200).send({email:email, message:'registration succeed'})})
-    .catch((error) => console.log('An error occured while sending message', error))
+    .catch((error) => console.log('An error occured while sending message'))
 }
 
 const login = async (req, res) => {
@@ -80,9 +80,12 @@ const connect = (req, res) => {
     const token = req.headers['authorization'];
     const jwtsecretkey = process.env.jwtsecretkey
     if (typeof token !== 'undefined') {
+      if(!token){
+        return res.status(400).send('no token')
+      }
       jwt.verify(token, jwtsecretkey, (err, authData) => {
         if (err) {
-          res.sendStatus(403).send({message:'Error token',authenticated:false});
+          res.status(403).send({message:'Error token',authenticated:false, token:token});
         } else {
           res.status(200).send({data:authData, authenticated:true})
         }
