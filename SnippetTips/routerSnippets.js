@@ -11,6 +11,22 @@ const storage = multer.diskStorage({
     } 
 })
 const upload = multer({storage:storage})
+
+function verifyToken(req, res, next) {
+    const token = req.headers['authorization'];
+    if (typeof token !== 'undefined') {
+      jwt.verify(token, secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403).send('error token');
+        } else {
+          req.authData = authData;
+          next();
+        }
+      });
+    } else {
+      res.sendStatus(401).send('No token');
+    }
+}
 const routerSnippets = express.Router()
 routerSnippets.get('/', getSnippets)
 routerSnippets.get('/:email',getUserSnippets)

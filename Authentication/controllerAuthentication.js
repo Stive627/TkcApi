@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const tmail = require('./tmail')
 const UserModel = require('./user')
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const Register = async(req, res) => {
@@ -40,8 +41,9 @@ const login = async (req, res) => {
     if(!user) return res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
+        const token = jwt.sign({username:usernameoremail}, process.env.jwtsecretkey)
         res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
-        return res.status(200).send({email:usernameoremail, message:'authentication granted'}) 
+        return res.status(200).send({email:usernameoremail, message:'authentication granted', token:token}) 
     }
     res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
 }
@@ -75,17 +77,19 @@ const passwordChange = async (req, res) => {
 }
 
 const connect = (req, res) => {
-    const cook = req.cookies.logininfo
-    try {
-        if(!cook){
-            return res.status(200).send({authenticated:false})
+    const token = req.headers['authorization'];
+    if (typeof token !== 'undefined') {
+      jwt.verify(token, secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403).send({message:'Error token',authenticated:false});
+        } else {
+          res.status(200).send({data:authData, authenticated:true})
         }
-        return res.status(200).send({authenticated:true, data: JSON.parse(cook)})
-    
-    } catch (error) {
-       res.status(400).send(error) 
+      });
+    } else {
+      res.sendStatus(401).send({message:'No token',authenticated:false});
     }
-   }
+}
 
 const logout = (req, res) => {
     try {

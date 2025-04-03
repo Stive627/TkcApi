@@ -15,7 +15,7 @@ app.use(cors({
     origin: ['https://tkc.tsasoft.com', 'http://localhost:3000'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     allowedHeaders: ['Content-Type', 'Authorization'], 
-    credentials: true 
+    credentials: true
   }));
 app.use(cookieParser())
 app.use(bodyParser.json())
