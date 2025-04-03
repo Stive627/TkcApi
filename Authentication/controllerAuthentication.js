@@ -78,8 +78,9 @@ const passwordChange = async (req, res) => {
 
 const connect = (req, res) => {
     const token = req.headers['authorization'];
+    const jwtsecretkey = process.env.jwtsecretkey
     if (typeof token !== 'undefined') {
-      jwt.verify(token, secretKey, (err, authData) => {
+      jwt.verify(token, jwtsecretkey, (err, authData) => {
         if (err) {
           res.sendStatus(403).send({message:'Error token',authenticated:false});
         } else {

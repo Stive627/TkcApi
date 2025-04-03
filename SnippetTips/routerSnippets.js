@@ -1,7 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const { getSnippets, getUserSnippets, addSnippet, updateSnippet, deleteSnippet, testImg } = require('./controllerSnippets')
-
+require('dotenv').config()
 const storage = multer.diskStorage({
     destination:function(req, file, cb){
         cb(null, 'public/snippets/')
@@ -14,8 +14,9 @@ const upload = multer({storage:storage})
 
 function verifyToken(req, res, next) {
     const token = req.headers['authorization'];
+    const jwtsecretkey = process.env.jwtsecretkey
     if (typeof token !== 'undefined') {
-      jwt.verify(token, secretKey, (err, authData) => {
+      jwt.verify(token, jwtsecretkey, (err, authData) => {
         if (err) {
           res.sendStatus(403).send('error token');
         } else {
