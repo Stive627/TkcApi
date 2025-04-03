@@ -22,6 +22,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.static("public"))
 app.get('/', (req, res) => res.status(200).send('The Api is working well!'))
+app.get('/setcookie', (req, res) => res.cookie('userinfo', JSON.stringify({name:'stive', uid:'24MCI10053', email:'fossistive627@gmail.com'}), {maxAge:1000*60*60*24*30, httpOnly:true, secure:true, sameSite:'none'}))
+app.get('/getcookie', (req, res) => {
+  const userinfo = req.cookies.userinfo
+  if(userinfo){
+    return res.status(200).send(JSON.parse(userinfo))
+  }
+  return res.status(400).send('No cookie set')
+})
 app.use('/snippet', routerSnippets)
 app.use('/project', routerProject)
 app.use('/user', routerAuthentication)
