@@ -81,13 +81,13 @@ const connect = (req, res) => {
     if (typeof token !== 'undefined') {
       jwt.verify(token, secretKey, (err, authData) => {
         if (err) {
-          res.sendStatus(403)
+          res.sendStatus(403).send({message:'Error token',authenticated:false});
         } else {
           res.status(200).send({data:authData, authenticated:true})
         }
       });
     } else {
-      res.sendStatus(401)
+      res.sendStatus(401).send({message:'No token',authenticated:false});
     }
 }
 
