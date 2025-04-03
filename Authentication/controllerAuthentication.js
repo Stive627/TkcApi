@@ -87,7 +87,7 @@ const connect = (req, res) => {
         }
       });
     } else {
-      res.sendStatus(401).send({message:'No token',authenticated:false});
+      res.status(401).send({message:'No token',authenticated:false});
     }
 }
 
