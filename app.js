@@ -12,10 +12,12 @@ const app = express()
 const port = process.env.port || 8080
 const uri = process.env.uri
 app.use(cors({
-    origin: ['https://tkc.tsasoft.com', 'http://localhost:3000'], 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
-    allowedHeaders: ['Content-Type', 'Authorization'], 
-  }));
+  origin: ['https://tkc.tsasoft.com', 'http://localhost:3000'], 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],          
+  allowedHeaders: ['Content-Type', 'Authorization'],          
+  optionsSuccessStatus: 200                              
+}));
+app.options('*', cors());
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
