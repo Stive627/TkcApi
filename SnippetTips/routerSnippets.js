@@ -1,6 +1,6 @@
 const express = require('express')
 const multer = require('multer')
-const { getSnippets, getUserSnippets, addSnippet, updateSnippet, deleteSnippet, testImg } = require('./controllerSnippets')
+const { getSnippets, getUserSnippets, addSnippet, updateSnippet, deleteSnippet, testImg} = require('./controllerSnippets')
 require('dotenv').config()
 const storage = multer.diskStorage({
     destination:function(req, file, cb){

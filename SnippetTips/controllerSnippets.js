@@ -1,6 +1,5 @@
 const UserModel = require("../Authentication/user")
 const SnippetModel = require("./Snippet")
-const fs = require('fs')
 
 const getSnippets = async(req, res) => {
     try {
@@ -48,14 +47,9 @@ const updateSnippet = async(req, res) => {
 
 const deleteSnippet = async(req, res) => { 
     try{
-        const snippet =  await SnippetModel.findOneAndDelete({_id:req.params.id})
-        const image = snippet.image
-            fs.unlink(image, (err) => {
-                if(err) return console.error(err)
-                console.log(`the image is deleted.`)
-                res.status(200).send('The snippet is deleted')
-            })
-        }
+        await SnippetModel.deleteOne({_id:req.params.id})
+        .then(()=> res.status(200).send('The snippet is deleted'))
+    }
     catch(error){
         res.status(400).send(`An error occured, ${error}`)
     }
