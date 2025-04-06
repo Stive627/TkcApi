@@ -30,7 +30,7 @@ const addSnippet = async(req, res) => {
     }
     const newSnippet = image? new SnippetModel({...req.body, image:image.path}) : new SnippetModel({...req.body})
     await newSnippet.save()
-    .then(()=> res.status(200).send('A new snippet added'))
+    .then(()=> res.status(200).send(`A new snippet added ${image}`))
     .catch((err) => res.status(400).send(err))
 }
 
