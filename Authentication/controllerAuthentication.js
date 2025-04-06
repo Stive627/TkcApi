@@ -41,8 +41,7 @@ const login = async (req, res) => {
     if(!user) return res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
     const goodPassowrd = await bcrypt.compare(password, user.password).catch((error)=>res.status(400).send(error))
     if(goodPassowrd){
-        const token = jwt.sign({username:usernameoremail}, process.env.jwtsecretkey)
-        res.cookie('logininfo',JSON.stringify({nameoremail:usernameoremail, password:password}), {maxAge:1000*60*60*24*30, httpOnly:true, SameSite:'None', secure:true})
+        const token = jwt.sign({username:usernameoremail, username:user.username}, process.env.jwtsecretkey)
         return res.status(200).send({email:usernameoremail, message:'authentication granted', token:token}) 
     }
     res.status(400).send('Invalid credentials. Please double check and enter. the correct credentials')
