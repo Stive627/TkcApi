@@ -53,6 +53,7 @@ const deleteSnippet = async(req, res) => {
             fs.unlink(image, (err) => {
                 if(err) return console.error(err)
                 console.log(`the image is deleted.`)
+                res.status(200).send('The snippet is deleted')
             })
         }
     catch(error){
