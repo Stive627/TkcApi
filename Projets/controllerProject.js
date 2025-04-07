@@ -1,6 +1,5 @@
 const UserModel = require("../Authentication/user")
 const ProjetModel = require("./Projet")
-const fs = require('fs')
 
 const getProjects = async(req, res) => {
     try {
@@ -22,10 +21,10 @@ const getUserProject = async(req, res) => {
 }
 
 const addProject = async(req, res) => {
-    const {title, category, description} = req.body
+    const {title, department, description} = req.body
     const images = req.files
     const imagesUrl = images.map(elt => elt.path)
-    if(!title || !category || !images || !description){
+    if(!title || !department || !images || !description){
         return res.status(400).send('The fields are missing')
     }
     const newProject = new ProjetModel({...req.body, images:imagesUrl})
@@ -35,11 +34,11 @@ const addProject = async(req, res) => {
 }
 
 const updateProject = async(req, res) => {
-    const {title, category, description} = req.body
+    const {title, department, description} = req.body
     const projectId = req.params.id
     const images = req.files
     const imagesUrl = images.map(elt => elt.path)
-    if(!title || !category || !images || !description){
+    if(!title || !department || !images || !description){
         return res.status(400).send('The fields are missing')
     }
         await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:imagesUrl})
@@ -49,18 +48,23 @@ const updateProject = async(req, res) => {
 
 const deleteProject = async(req, res) => { 
     try{
-        const project =  await ProjetModel.findOneAndDelete({_id:req.params.id})
-        const images = project.images
-        for(var i = 0; i <= images.length; i++){
-            fs.unlink(images[i], (err) => {
-                if(err) return console.error(err)
-                console.log(`the file no${i} is deleted.`)
-            })
-        }
+        await ProjetModel.findOneAndDelete({_id:req.params.id})
+        .then(()=> res.status(200).send('The project is deleted'))
+        .catch(err => res.status(400).send(err))
+
     }
     catch(error){
         res.status(400).send(`An error occured, ${error}`)
     }
 } 
+const testSomething = (req, res) => {
+    try {
+        const images = req.files
+        const imagesUrl = images.map(elt => elt.path)
+        res.status(200).send(imagesUrl)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+}
 
-module.exports = {getProjects, getUserProject, addProject, updateProject, deleteProject}
+module.exports = {getProjects, getUserProject, addProject, updateProject, deleteProject, testSomething}
