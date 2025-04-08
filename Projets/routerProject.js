@@ -12,22 +12,6 @@ const storage = multer.diskStorage({
     } 
 })
 
-function verifyToken(req, res, next) {
-    const token = req.headers['authorization'];
-    const jwtsecretkey = process.env.jwtsecretkey 
-    if (typeof token !== 'undefined') {
-      jwt.verify(token, jwtsecretkey, (err, authData) => {
-        if (err) {
-          res.sendStatus(403).send('error token');
-        } else {
-          req.authData = authData;
-          next();
-        }
-      });
-    } else {
-      res.sendStatus(401).send('No token');
-    }
-}
 const upload = multer({storage:storage})
 routerProject.get('/', getProjects)
 routerProject.get('/userproject/:email',getUserProject)

@@ -29,7 +29,7 @@ const addProject = async(req, res) => {
     }
     const newProject = new ProjetModel({...req.body, images:imagesUrl})
     await newProject.save()
-    .then(()=> res.status(200).send('A new project added'))
+    .then(()=> res.status(200).send({...req.body, images:imagesUrl}))
     .catch((err) => res.status(400).send(err))
 }
 
@@ -42,7 +42,7 @@ const updateProject = async(req, res) => {
         return res.status(400).send('The fields are missing')
     }
         await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:imagesUrl})
-        .then(()=> res.status(200).send('the project is updated'))
+        .then(()=> res.status(200).send({...req.body, images:imagesUrl}))
         .catch((err) => res.status(400).send(err))
 }
 

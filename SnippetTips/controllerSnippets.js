@@ -29,7 +29,7 @@ const addSnippet = async(req, res) => {
     }
     const newSnippet = image? new SnippetModel({...req.body, image:image.path}) : new SnippetModel({...req.body})
     await newSnippet.save()
-    .then(()=> res.status(200).send(`A new snippet added ${image}`))
+    .then(()=> res.status(200).send({...req.body, image:image.path}))
     .catch((err) => res.status(400).send(err))
 }
 
@@ -41,7 +41,7 @@ const updateSnippet = async(req, res) => {
         return res.status(400).send('The fields are missing')
     }
     await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image.path})
-    .then(()=> res.status(200).send('the snippet is updated'))
+    .then(()=> res.status(200).send({...req.body, image:image.path}))
     .catch((err) => res.status(400).send(err))
 }
 
