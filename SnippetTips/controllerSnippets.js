@@ -1,5 +1,16 @@
 const UserModel = require("../Authentication/user")
+const { getUrlKey } = require("../functions/getUrlKey")
 const SnippetModel = require("./Snippet")
+const {S3Client, DeleteObjectCommand} = require('@aws-sdk/client-s3')
+require('dotenv').config()
+
+const s3 = new S3Client({
+    region:process.env.AWS_REGION,
+    credentials:{
+        accessKeyId:process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey:process.env.AWS_SECRET_ACCESS_KEY
+    }
+})
 
 const getSnippets = async(req, res) => {
     try {
@@ -27,9 +38,9 @@ const addSnippet = async(req, res) => {
     if(!title || !department || !description){
         return res.status(400).send('The fields are missing')
     }
-    const newSnippet = image? new SnippetModel({...req.body, image:image.path}) : new SnippetModel({...req.body})
+    const newSnippet = new SnippetModel({...req.body, image:image?.location})
     await newSnippet.save()
-    .then(()=> res.status(200).send({...req.body, image:image.path}))
+    .then((value)=> res.status(200).send(value))
     .catch((err) => res.status(400).send(err))
 }
 
@@ -40,29 +51,33 @@ const updateSnippet = async(req, res) => {
     if(!title || !department || !description){
         return res.status(400).send('The fields are missing')
     }
-    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image.path})
-    .then(()=> res.status(200).send({...req.body, image:image.path}))
+    const snippet = await SnippetModel.findOne({_id:snippetId})
+    const key = getUrlKey(snippet.image)
+    const command = new DeleteObjectCommand({
+            Bucket:process.env.AWS_BUCKET,
+            Key:decodeURI(key)
+        })
+        await s3.send(command)
+    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image?.location})
+    .then((value)=> res.status(200).send(value))
     .catch((err) => res.status(400).send(err))
+
 }
 
 const deleteSnippet = async(req, res) => { 
     try{
-        await SnippetModel.deleteOne({_id:req.params.id})
-        .then(()=> res.status(200).send('The snippet is deleted'))
+        const snippet = await SnippetModel.findOneAndDelete({_id:req.params.id})
+        const key = getUrlKey(snippet.image)
+        const command = new DeleteObjectCommand({
+            Bucket:process.env.AWS_BUCKET,
+            Key:decodeURI(key)
+        })
+        await s3.send(command)
+        res.status(200).send('The snippet is deleted')
     }
     catch(error){
         res.status(400).send(`An error occured, ${error}`)
     }
 } 
 
-const testImg = (req, res) => {
-    try {
-        const img = req.files
-        if(!img) res.status(400).send('There is a missing field.')
-        res.status(200).send(img)
-    } catch (error) {
-        res.status(400).send(error)
-    }
-}
-
-module.exports = {getSnippets, getUserSnippets, addSnippet, updateSnippet, deleteSnippet, testImg}
+module.exports = {getSnippets, getUserSnippets, addSnippet, updateSnippet, deleteSnippet}
