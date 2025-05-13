@@ -62,7 +62,7 @@ const updateProject = async(req, res) => {
         }
     })
     await s3.send(command)
-    await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:imagesUrl})
+    await ProjetModel.findOneAndUpdate({_id:projectId}, {...req.body, images:imagesUrl},{returnDocument:"after"})
     .then((value)=> res.status(200).send(value))
     .catch((err) => res.status(400).send(err))
 }

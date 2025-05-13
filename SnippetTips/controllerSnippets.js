@@ -58,7 +58,7 @@ const updateSnippet = async(req, res) => {
             Key:decodeURI(key)
         })
         await s3.send(command)
-    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image?.location})
+    await SnippetModel.findOneAndUpdate({_id:snippetId}, {...req.body, image:image?.location}, {returnDocument:"after"})
     .then((value)=> res.status(200).send(value))
     .catch((err) => res.status(400).send(err))
 

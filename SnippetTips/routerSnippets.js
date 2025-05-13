@@ -33,5 +33,4 @@ routerSnippets.get('/:email',getUserSnippets)
 routerSnippets.post('/add', upload.single('image'), addSnippet)
 routerSnippets.put('/update/:id', upload.single('image'), updateSnippet)
 routerSnippets.delete('/delete/:id',deleteSnippet)
-routerSnippets.post('/testImg', upload.array('images', 10), testImg)
 module.exports = routerSnippets
